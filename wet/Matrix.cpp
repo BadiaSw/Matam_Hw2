@@ -17,12 +17,15 @@ Matrix::Matrix(int rows, int cols, int value) : row(rows), column(cols) {
 }
 
 Matrix::Matrix(const Matrix& other) : row(other.row), column(other.column) {
-            data = new int[row * column];  // Allocate new memory
-        // Copy the data from the original matrix
+            if (row * column > 0) {
+        data = new int[row * column];
         for (int i = 0; i < row * column; ++i) {
-            data[i] = other.data[i];  // Copy data from the original matrix
+            data[i] = other.data[i];
         }
+    } else {
+        data = nullptr;
     }
+}
 
 
 Matrix& Matrix::operator=(const Matrix& other) {
@@ -182,9 +185,6 @@ Matrix Matrix::rotateCounterClockwise() const {
     return result;
 }
     Matrix Matrix::transpose() const {
-        if(row!=column){
-exitWithError(MatamErrorType::NotSquareMatrix);
-        }
         Matrix result(column, row, 0);
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < column; ++j) {
@@ -201,5 +201,7 @@ exitWithError(MatamErrorType::NotSquareMatrix);
         }
         return std::sqrt(sum);
     }
-
+Matrix::~Matrix() {
+    delete[] data;
+}
 

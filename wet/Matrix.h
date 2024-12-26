@@ -5,7 +5,7 @@
 class Matrix {
 public:
     Matrix();
-
+    ~Matrix();
     Matrix(int rows, int cols, int value = 0);
 
     // Copy constructor: creates a copy of another Matrix object
