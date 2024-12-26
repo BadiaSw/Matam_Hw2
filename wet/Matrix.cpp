@@ -1,6 +1,7 @@
 #include "Matrix.h"
 #include "Utilities.h"
 #include <iostream>
+#include <math.h>
 
 // Default constructor: initializes a matrix with 0 rows and 0 columns
 Matrix::Matrix() : row(0), column(0), data(nullptr) {
@@ -70,4 +71,135 @@ std::ostream& operator<<(std::ostream& os, const Matrix& matrix) {
     }
     return os;  // Return the ostream object for chained usage (like cout << matrix)
 }
+
+Matrix Matrix::operator-(const Matrix& other) const {
+    if (row != other.row || column != other.column) {
+         exitWithError(MatamErrorType::UnmatchedSizes);
+    }
+    Matrix result(row, column, 0);
+    for (int i = 0; i < row * column; ++i) {
+        result.data[i] = data[i] - other.data[i];
+    }
+    return result;
+}
+Matrix Matrix::operator+(const Matrix& other) const {
+    if (row != other.row || column != other.column) {
+        exitWithError(MatamErrorType::UnmatchedSizes);
+    }
+    Matrix result(row, column, 0);
+    for (int i = 0; i < row * column; ++i) {
+        result.data[i] = data[i] + other.data[i];
+    }
+    return result;
+}
+Matrix Matrix::operator*(const Matrix& other) const {
+    if (column != other.row) {
+        exitWithError(MatamErrorType::UnmatchedSizes);
+    }
+    Matrix result(row, other.column, 0);
+    for (int i = 0; i < row; ++i) {
+        for (int j = 0; j < other.column; ++j) {
+            for (int k = 0; k < column; ++k) {
+                result(i, j) += (*this)(i, k) * other(k, j);
+            }
+        }
+    }
+    return result;
+}
+
+Matrix& Matrix::operator-=(const Matrix& other) {
+    *this = *this - other;  
+    return *this;
+}
+
+Matrix& Matrix::operator+=(const Matrix& other) {
+    *this = *this + other;  
+    return *this;
+}
+
+Matrix& Matrix::operator*=(const Matrix& other) {
+    *this = *this * other;  
+    return *this;
+}
+
+Matrix Matrix::operator*(int scalar) const {
+    Matrix result(row, column, 0);
+    for (int i = 0; i < row * column; ++i) {
+        result.data[i] = data[i] * scalar;
+    }
+    return result;
+}
+
+Matrix operator*(int scalar, const Matrix& matrix) {
+    return matrix * scalar; 
+}
+
+Matrix& Matrix::operator*=(int scalar) {
+    for (int i = 0; i < row * column; ++i) {
+        data[i] *= scalar;
+    }
+    return *this;
+}
+Matrix Matrix::operator-() const {
+    return *this * -1;
+
+}
+bool Matrix::operator==(const Matrix& other) const {
+    
+    if (row != other.row || column != other.column) {
+        return false;  
+    }
+    
+    for (int i = 0; i < row * column; ++i) {
+        if (data[i] != other.data[i]) {
+            return false;  
+        }
+    }
+    return true;  
+}
+
+bool Matrix::operator!=(const Matrix& other) const {
+    return !(*this == other);  
+}
+
+Matrix Matrix::rotateClockwise() const {
+    Matrix result(column, row, 0); 
+    for (int i = 0; i < row; ++i) {
+        for (int j = 0; j < column; ++j) {
+            result(j, row - 1 - i) = (*this)(i, j);
+        }
+    }
+    return result;
+}
+
+Matrix Matrix::rotateCounterClockwise() const {
+    Matrix result(column, row, 0); 
+    for (int i = 0; i < row; ++i) {
+        for (int j = 0; j < column; ++j) {
+            result(column - 1 - j, i) = (*this)(i, j);
+        }
+    }
+    return result;
+}
+    Matrix Matrix::transpose() const {
+        if(row!=column){
+exitWithError(MatamErrorType::NotSquareMatrix);
+        }
+        Matrix result(column, row, 0);
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < column; ++j) {
+                result(j, i) = (*this)(i, j);
+            }
+        }
+        return result;
+    }
+
+     double Matrix::CalcFrobeniusNorm(const Matrix& matrix) {
+        double sum = 0.0;
+        for (int i = 0; i < matrix.row*matrix.column; ++i) {
+                sum += std::pow(matrix.data[i] ,2);
+        }
+        return std::sqrt(sum);
+    }
+
 
