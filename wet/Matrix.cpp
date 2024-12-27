@@ -62,20 +62,19 @@ int Matrix::operator()(int i, int j) const {
 
 // Define the << operator
 std::ostream& operator<<(std::ostream& os, const Matrix& matrix) {
-     if(matrix.row>0 && matrix.column>0){
     for (int i = 0; i < matrix.row; ++i) {
         os << "|";  // Start each row with a vertical line
         for (int j = 0; j < matrix.column; ++j) {
-           
             os << matrix(i, j);  // Access the element at (i, j)
             if (j < matrix.column - 1) {
                 os << "|";  // Place a separator '|' between elements
             }
-        
+        }
         os << "|" << std::endl;  // End the row with a vertical line and move to the next line
-    }}}
+    }
     return os;  // Return the ostream object for chained usage (like cout << matrix)
 }
+
 Matrix Matrix::operator-(const Matrix& other) const {
     if (row != other.row || column != other.column) {
          exitWithError(MatamErrorType::UnmatchedSizes);
