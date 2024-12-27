@@ -64,20 +64,21 @@ MataMvidia MataMvidia::operator+(const MataMvidia& other){
 MataMvidia result(*this);
 return(result+=other);
 }
-std::ostream& operator<<(std::ostream& os, const Matrix& matrix) {
-    for (int i = 0; i < matrix.row; ++i) {
-        os << "|";  // Start each row with a vertical line
-        for (int j = 0; j < matrix.column; ++j) {
-            os << matrix(i, j);  // Access the element at (i, j)
-            if (j < matrix.column - 1) {
-                os << "|";  // Place a separator '|' between elements
-            }
-        }
-        os << "|" << std::endl;  // End the row with a vertical line and move to the next line
+std::ostream& operator<<(std::ostream& os, const MataMvidia& movie) {
+    // Print movie name and producer
+    os << "Movie Name: " << movie.name << "\n";
+    os << "Author: " << movie.producer << "\n";
+    os<<"\n";
+    // Iterate through all frames and print each one
+    for (int i = 0; i < movie.size; ++i) {
+        os << "Frame " << i << ":\n";
+        os << movie.frames[i]<<"\n";  // Assuming Matrix already implements << operator
     }
-    return os;  // Return the ostream object for chained usage (like cout << matrix)
-}
 
+    // Print the end of the movie
+    os << "-----End of Movie-----\n";
+    return os;
+}
 MataMvidia::~MataMvidia() {
     delete []frames;
 }
