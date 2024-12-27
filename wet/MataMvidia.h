@@ -8,6 +8,7 @@ using namespace std;
 class MataMvidia{
 
 public:
+    
     MataMvidia(string Name,string Producer,Matrix* Frames,int Size);
      MataMvidia(const MataMvidia& other);
      ~MataMvidia();

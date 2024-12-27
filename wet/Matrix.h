@@ -10,7 +10,7 @@ public:
 
     // Copy constructor: creates a copy of another Matrix object
     Matrix(const Matrix& other);
-
+   
     // Copy assignment operator: assigns one Matrix to another
     Matrix& operator=(const Matrix& other);
 
